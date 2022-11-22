@@ -9,6 +9,7 @@ class Game:
         # Creates the window
         self.window = pygame.display.set_mode((800, 800))
 
+
     def run(self):
         """Main method, manages interaction between screens"""
 
@@ -22,15 +23,18 @@ class Game:
         # Start the loop
         running = True
         current_screen = "welcome"
+        current_selection = None
         while running:
+            print(current_selection)
             # Obtain the screen class
+            print(current_screen)
             screen_class = screens.get(current_screen)
             if not screen_class:
                 raise RuntimeError(f"Screen {current_screen} not found!")
 
             # Create a new screen object, "connected" to the window
-            screen = screen_class(self.window)
-
+            screen = screen_class(self.window, current_selection)
+            print(screen_class)
             # Run the screen
             screen.run()
 
@@ -39,6 +43,7 @@ class Game:
                 running = False
             # Switch to the next screen
             current_screen = screen.next_screen
+            current_selection = screen.current_selection
 
 
 if __name__ == "__main__":

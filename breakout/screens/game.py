@@ -11,8 +11,7 @@ class GameScreen(BaseScreen):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         #champion Selection
-        print(self.champ_choice)
-
+        print(self.current_selection)
         self.champion_selection = {
             "Ezreal": ["./images/ezreal.png", (50, 50), "./images/ezability.png", (20, 15)],
             "Annie": ["./images/annie.png", (60, 60), "./images/fireball.png", (30, 20)],
@@ -23,7 +22,7 @@ class GameScreen(BaseScreen):
         self.background = Background()
 
         #Champion
-        self.champion = Champion(self.champion_selection["Ezreal"][0], self.champion_selection["Ezreal"][1])
+        self.champion = Champion(self.champion_selection[self.current_selection][0], self.champion_selection[self.current_selection][1])
 
         #Enemies
         self.enemies = pygame.sprite.Group()
@@ -79,7 +78,7 @@ class GameScreen(BaseScreen):
                     self.sound_ability.play()
                     print(self.champion.cooldown)
                     ability_direction = pygame.mouse.get_pos()
-                    ability = Ability(self.champion.pos, self.champion_selection["Ezreal"][2], self.champion_selection["Ezreal"][3])
+                    ability = Ability(self.champion.pos, self.champion_selection[self.current_selection][2], self.champion_selection[self.current_selection][3])
                     ability.set_target(ability_direction)
                     self.abilities.add(ability)
         if event.type == pygame.MOUSEBUTTONDOWN:

@@ -4,15 +4,15 @@ import pygame
 class BaseScreen:
     """Base class for all game screens"""
 
-    def __init__(self, window):
+    def __init__(self, window, current_selection):
         # window surface
         self.window = window
         # By default, there is no next screen (= game quits)
         self.next_screen = False
         self.kill_count = 0
         self.time = 0
+        self.current_selection = current_selection
 
-        self.champ_choice = None
 
     def run(self):
         """
@@ -73,9 +73,7 @@ class BaseScreen:
         print("You should override the UPDATE method in your class...")
 
     def manage_event(self, event):
-        """Child classes should override this method"""
-
-        print("You should override the MANAGE_EVENT method in your class...")
+        pass
 
     def manage_enemies(self):
-        print('xd')
+        pass
