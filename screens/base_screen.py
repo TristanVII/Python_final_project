@@ -12,6 +12,8 @@ class BaseScreen:
         self.kill_count = 0
         self.time = 0
 
+        self.champ_choice = None
+
     def run(self):
         """
         This is the main method of the class.

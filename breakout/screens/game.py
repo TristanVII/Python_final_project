@@ -1,20 +1,29 @@
-import random
+import random, os
 import pygame
 from screens import BaseScreen
 
 from components import TextBox
 from ..components import Background, Champion, Ability, Enemy
 
+pygame.mixer.init()
 
 class GameScreen(BaseScreen):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
+        #champion Selection
+        print(self.champ_choice)
+
+        self.champion_selection = {
+            "Ezreal": ["./images/ezreal.png", (50, 50), "./images/ezability.png", (20, 15)],
+            "Annie": ["./images/annie.png", (60, 60), "./images/fireball.png", (30, 20)],
+            "Kennen": ["./images/kennen.png", (60, 60), "./images/shuriken.png", (40, 40)]
+        }
 
         #background
         self.background = Background()
 
         #Champion
-        self.champion = Champion()
+        self.champion = Champion(self.champion_selection["Ezreal"][0], self.champion_selection["Ezreal"][1])
 
         #Enemies
         self.enemies = pygame.sprite.Group()
@@ -24,6 +33,20 @@ class GameScreen(BaseScreen):
 
         #Time & Score
         self.score = 0
+
+        #Sound
+        self.sound_ability = pygame.mixer.Sound('./sounds/abilitysound.mp3')
+        self.enemy_death = pygame.mixer.Sound('./sounds/enemydeathsound.mp3')
+        self.champion_death = pygame.mixer.Sound('./sounds/deathsound.mp3')
+
+        #Death Screen
+        self.death = False
+        self.death_boxes = pygame.sprite.Group()
+        self.death_box = TextBox(
+            (400, 100), f'TEEMO KILLED YOU', color=(0, 0, 0), bgcolor=(255, 0, 0)
+        )
+        self.death_box.rect.center = (400, 400)
+        self.death_boxes.add(self.death_box)
 
     def update(self):
         self.champion.update()
@@ -42,6 +65,8 @@ class GameScreen(BaseScreen):
         self.enemies.draw(self.window)
         self.window.blit(self.text_time, (600, 20))
         self.window.blit(self.text_score, (600, 60))
+        if self.death != False:
+            self.death_boxes.draw(self.window)
 
 
     def manage_event(self, event):
@@ -51,9 +76,10 @@ class GameScreen(BaseScreen):
                     pass
                 else:
                     self.champion.cooldown = pygame.time.get_ticks() / 1000
+                    self.sound_ability.play()
                     print(self.champion.cooldown)
                     ability_direction = pygame.mouse.get_pos()
-                    ability = Ability(self.champion.pos)
+                    ability = Ability(self.champion.pos, self.champion_selection["Ezreal"][2], self.champion_selection["Ezreal"][3])
                     ability.set_target(ability_direction)
                     self.abilities.add(ability)
         if event.type == pygame.MOUSEBUTTONDOWN:
@@ -144,10 +170,17 @@ class GameScreen(BaseScreen):
 
         for i in self.abilities:
             if pygame.sprite.spritecollide(i, self.enemies, dokill=True):
+                self.enemy_death.play()
                 i.kill()
-                print(self.kill_count)
                 self.score += 1
                 
         if pygame.sprite.spritecollide(self.champion, self.enemies, dokill=False):
+            self.champion_death.play()
+            self.death = True
+            self.draw()
+            pygame.display.flip()
+            pygame.event.pump()
+            #wait 5 seconds before changing screens
+            pygame.time.delay(5000)
             self.next_screen = "game_over"
             self.running = False

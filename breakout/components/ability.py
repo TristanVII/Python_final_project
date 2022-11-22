@@ -3,10 +3,10 @@ from pygame.math import Vector2
 
 class Ability(pygame.sprite.Sprite):
     #pos = position of champion
-    def __init__(self, pos):
+    def __init__(self, pos, ability, size):
         super().__init__()
-        self.original_image = pygame.image.load("./images/ability.png")
-        self.image = pygame.transform.scale(self.original_image, (20, 15))
+        self.original_image = pygame.image.load(ability)
+        self.image = pygame.transform.scale(self.original_image, size)
         self.rect = self.image.get_rect(center=pos)
         self.pos = Vector2(pos)
         self.speed = 9

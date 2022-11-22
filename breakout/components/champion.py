@@ -3,10 +3,10 @@ from pygame.math import Vector2
 
 class Champion(pygame.sprite.Sprite):
     #pos = position of champion
-    def __init__(self, pos=(400, 400)):
+    def __init__(self, champ, size, pos=(400, 400)):
         super().__init__()
-        self.original_image = pygame.image.load("./images/ezreal.png")
-        self.image = pygame.transform.scale(self.original_image, (50, 50))
+        self.original_image = pygame.image.load(champ)
+        self.image = pygame.transform.scale(self.original_image, size)
         self.rect = self.image.get_rect(center=pos)
         self.pos = Vector2(pos)
         self.speed = 2
