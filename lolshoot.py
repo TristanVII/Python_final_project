@@ -23,9 +23,9 @@ class Game:
         # Start the loop
         running = True
         current_screen = "welcome"
-        current_selection = None
+        current_state = {}
         while running:
-            print(current_selection)
+            print(current_state)
             # Obtain the screen class
             print(current_screen)
             screen_class = screens.get(current_screen)
@@ -33,7 +33,7 @@ class Game:
                 raise RuntimeError(f"Screen {current_screen} not found!")
 
             # Create a new screen object, "connected" to the window
-            screen = screen_class(self.window, current_selection)
+            screen = screen_class(self.window, current_state)
             print(screen_class)
             # Run the screen
             screen.run()
@@ -43,7 +43,7 @@ class Game:
                 running = False
             # Switch to the next screen
             current_screen = screen.next_screen
-            current_selection = screen.current_selection
+            current_state = screen.state
 
 
 if __name__ == "__main__":

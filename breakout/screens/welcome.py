@@ -51,16 +51,16 @@ class WelcomeScreen(BaseScreen):
             mouse = event.pos
             if self.textbox2.rect.collidepoint(mouse):
                 print("Clicked Ez")
-                self.current_selection = 'Ezreal'
+                self.state["current_selection"] = 'Ezreal'
                 self.next_screen = "game"
                 self.running = False
             if self.textbox3.rect.collidepoint(mouse):
                 print("Clicked Annie")
-                self.current_selection = 'Annie'
+                self.state["current_selection"] = 'Annie'
                 self.next_screen = "game"
                 self.running = False
             if self.textbox4.rect.collidepoint(mouse):
                 print("Clicked Kennen")
-                self.current_selection = 'Kennen'
+                self.state["current_selection"] = 'Kennen'
                 self.next_screen = "game"
                 self.running = False          

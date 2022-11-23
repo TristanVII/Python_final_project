@@ -11,18 +11,18 @@ class GameScreen(BaseScreen):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         #champion Selection
-        print(self.current_selection)
+        self.current_selection = self.state['current_selection']
         self.champion_selection = {
-            "Ezreal": ["./images/ezreal.png", (50, 50), "./images/ezability.png", (20, 15)],
-            "Annie": ["./images/annie.png", (60, 60), "./images/fireball.png", (30, 20)],
-            "Kennen": ["./images/kennen.png", (60, 60), "./images/shuriken.png", (40, 40)]
+            "Ezreal": ["./images/ezreal.png", (50, 50), "./images/ezability.png", (20, 15), './sounds/abilitysound.mp3', './sounds/ezdeath.mp3'],
+            "Annie": ["./images/annie.png", (60, 60), "./images/fireball.png", (30, 20), './sounds/firesound.mp3', './sounds/anniedeath.mp3'],
+            "Kennen": ["./images/kennen.png", (60, 60), "./images/shuriken.png", (40, 40), './sounds/shurikenthrow.mp3', './sounds/kennendeath.mp3']
         }
 
         #background
         self.background = Background()
 
         #Champion
-        self.champion = Champion(self.champion_selection[self.current_selection][0], self.champion_selection[self.current_selection][1])
+        self.champion = Champion(self.champion_selection[self.current_selection][0], self.champion_selection[self.current_selection][1], self.champion_selection[self.current_selection][5])
 
         #Enemies
         self.enemies = pygame.sprite.Group()
@@ -33,10 +33,11 @@ class GameScreen(BaseScreen):
         #Time & Score
         self.score = 0
 
-        #Sound
-        self.sound_ability = pygame.mixer.Sound('./sounds/abilitysound.mp3')
+        #Sound Because every enemy has same death sound
         self.enemy_death = pygame.mixer.Sound('./sounds/enemydeathsound.mp3')
-        self.champion_death = pygame.mixer.Sound('./sounds/deathsound.mp3')
+
+        #Time alive
+        self.time_alive = 0
 
         #Death Screen
         self.death = False
@@ -47,14 +48,21 @@ class GameScreen(BaseScreen):
         self.death_box.rect.center = (400, 400)
         self.death_boxes.add(self.death_box)
 
+        # Font for scores only in game.oy
+        self.font = pygame.font.SysFont('Consolas', 30)
+
+        #Intro tip
+        self.tip = self.font.render('Press Q to shoot, RIGHT-CLICK to move', True, (255, 0, 0))
+
     def update(self):
         self.champion.update()
         self.abilities.update()
         self.enemies.update()
-        #SHOULD THIS BE HERE?
-        font = pygame.font.SysFont('Consolas', 30)
-        self.text_time = font.render(f'TIME: {str(self.time)}', True, (0, 0, 0))
-        self.text_score = font.render(f'SCORE:{str(self.score)}', True, (0, 0, 0))
+        self.manage_enemies()
+        #MANAGE TIME without pygame.time.getticks()
+        self.time_alive += 1 / 60
+        self.text_time = self.font.render(f'TIME: {str(int(self.time_alive))}s', True, (0, 0, 0))
+        self.text_score = self.font.render(f'SCORE:{str(self.score)}', True, (0, 0, 0))
 
     def draw(self):
         self.window.fill((255, 255, 255))
@@ -66,6 +74,8 @@ class GameScreen(BaseScreen):
         self.window.blit(self.text_score, (600, 60))
         if self.death != False:
             self.death_boxes.draw(self.window)
+        if self.time_alive < 2:
+            self.window.blit(self.tip, (70, 200))
 
 
     def manage_event(self, event):
@@ -75,10 +85,10 @@ class GameScreen(BaseScreen):
                     pass
                 else:
                     self.champion.cooldown = pygame.time.get_ticks() / 1000
-                    self.sound_ability.play()
                     print(self.champion.cooldown)
                     ability_direction = pygame.mouse.get_pos()
-                    ability = Ability(self.champion.pos, self.champion_selection[self.current_selection][2], self.champion_selection[self.current_selection][3])
+                    ability = Ability(self.champion.pos, self.champion_selection[self.current_selection][2], self.champion_selection[self.current_selection][3], self.champion_selection[self.current_selection][4])
+                    ability.sound_ability.play()
                     ability.set_target(ability_direction)
                     self.abilities.add(ability)
         if event.type == pygame.MOUSEBUTTONDOWN:
@@ -88,19 +98,8 @@ class GameScreen(BaseScreen):
                 print(mouse_pos)
                 self.champion.set_target(mouse_pos)
 
-                
-
-        # if event.type == pygame.MOUSEBUTTONDOWN:
-        #     self.running = False
-        #     self.next_screen = "welcome"
-
-        # if event.type == pygame.KEYDOWN:
-        #     if event.key == pygame.K_SPACE:
-        #         self.ball.speed = 10
-        #         self.ball.angle = 1.5
     def manage_enemies(self):
-        time = int(pygame.time.get_ticks() / 1000)
-        if time < 30:
+        if self.time_alive < 30:
             if random.randrange(0, 100) < 1:
                 sides = ['top', 'bottom', 'left', 'right']
                 side = random.choice(sides)
@@ -121,7 +120,7 @@ class GameScreen(BaseScreen):
                 enemy.set_target(self.champion.pos)
                 self.enemies.add(enemy)
 
-        if time > 30 and time < 60:
+        if self.time_alive > 30 and self.time_alive < 60:
             if random.randrange(0, 100) < 1.5:
                 sides = ['top', 'bottom', 'left', 'right']
                 side = random.choice(sides)
@@ -142,7 +141,7 @@ class GameScreen(BaseScreen):
                 enemy.set_target(self.champion.pos)
                 self.enemies.add(enemy)
 
-        if time > 60:
+        if self.time_alive > 60:
             if random.randrange(0, 100) < 3:
                 sides = ['top', 'bottom', 'left', 'right']
                 side = random.choice(sides)
@@ -174,12 +173,14 @@ class GameScreen(BaseScreen):
                 self.score += 1
                 
         if pygame.sprite.spritecollide(self.champion, self.enemies, dokill=False):
-            self.champion_death.play()
+            self.champion.champion_death.play()
             self.death = True
             self.draw()
             pygame.display.flip()
             pygame.event.pump()
             #wait 5 seconds before changing screens
             pygame.time.delay(5000)
+            self.state["time_alive"] = self.time_alive
             self.next_screen = "game_over"
             self.running = False
+            self.state["score"] = self.score

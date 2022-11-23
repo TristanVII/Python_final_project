@@ -3,13 +3,14 @@ from pygame.math import Vector2
 
 class Ability(pygame.sprite.Sprite):
     #pos = position of champion
-    def __init__(self, pos, ability, size):
+    def __init__(self, pos, ability, size, sound):
         super().__init__()
         self.original_image = pygame.image.load(ability)
         self.image = pygame.transform.scale(self.original_image, size)
         self.rect = self.image.get_rect(center=pos)
         self.pos = Vector2(pos)
         self.speed = 9
+        self.sound_ability = pygame.mixer.Sound(sound)
 
     def set_target(self, pos):
         self.target = Vector2(pos)

@@ -4,15 +4,17 @@ import pygame
 class BaseScreen:
     """Base class for all game screens"""
 
-    def __init__(self, window, current_selection):
+    # def __init__(self, window, current_selection):
+    def __init__(self, window, state=None):
         # window surface
         self.window = window
         # By default, there is no next screen (= game quits)
         self.next_screen = False
-        self.kill_count = 0
-        self.time = 0
-        self.current_selection = current_selection
-
+        # self.current_selection = current_selection
+        if state == None:
+            self.state = {}
+        else:
+            self.state = state
 
     def run(self):
         """
@@ -35,11 +37,7 @@ class BaseScreen:
             self.draw()
             # Update the display
             pygame.display.update()
-            # manage the enemies from game.py
-            self.manage_enemies()
 
-            #Manage time
-            self.time = int(pygame.time.get_ticks() / 1000)
 
             # Event loop
             for event in pygame.event.get():
@@ -75,5 +73,3 @@ class BaseScreen:
     def manage_event(self, event):
         pass
 
-    def manage_enemies(self):
-        pass

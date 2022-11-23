@@ -3,7 +3,7 @@ from pygame.math import Vector2
 
 class Champion(pygame.sprite.Sprite):
     #pos = position of champion
-    def __init__(self, champ, size, pos=(400, 400)):
+    def __init__(self, champ, size, deathsound, pos=(400, 400)):
         super().__init__()
         self.original_image = pygame.image.load(champ)
         self.image = pygame.transform.scale(self.original_image, size)
@@ -11,6 +11,7 @@ class Champion(pygame.sprite.Sprite):
         self.pos = Vector2(pos)
         self.speed = 2
         self.cooldown = 0
+        self.champion_death = pygame.mixer.Sound(deathsound)
 
         # Starting position = middle of the screen, bottom
  
