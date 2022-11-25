@@ -1,20 +1,21 @@
 import pygame
 from screens import BaseScreen
 from components import TextBox
-from ..components import Background
+from ..components import Background, Logo
 
 
 class WelcomeScreen(BaseScreen):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
 
-        self.sprites = pygame.sprite.Group()
+        #Main Background Class
+        self.background = Background()
 
-        #Select Champion Textbox
-        self.textbox1 = TextBox(
-            (300, 100), "Select a Champion", color=(255, 255, 255), bgcolor=(0, 0, 0)
-        )
-        self.textbox1.rect.x, self.textbox1.rect.y= 250, 100
+        #League logo
+        self.league_logo = Logo("./images/leaguelogo.png", (350, 150), [235, 100])
+        
+        #Sprite Groupe
+        self.sprites = pygame.sprite.Group()
 
         #Ezreal textbox
         self.textbox2 = TextBox(
@@ -34,12 +35,12 @@ class WelcomeScreen(BaseScreen):
         )
         self.textbox4.rect.x, self.textbox4.rect.y= 550, 400
 
-        self.sprites.add(self.textbox1, self.textbox2, self.textbox3, self.textbox4)
-        self.background = Background()
+        self.sprites.add(self.textbox2, self.textbox3, self.textbox4)
 
     def draw(self):
         self.window.fill((255, 255, 255))
         self.window.blit(self.background.image, self.background.rect)
+        self.window.blit(self.league_logo.image, self.league_logo.rect)
         self.sprites.draw(self.window)
 
     def update(self):
