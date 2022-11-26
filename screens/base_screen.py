@@ -61,14 +61,10 @@ class BaseScreen:
         return self.window.get_rect()
 
     def draw(self):
-        """Child classes should override this method"""
-
-        print("You should override the DRAW method in your class...")
+        pass
 
     def update(self):
-        """Child classes should override this method"""
-
-        print("You should override the UPDATE method in your class...")
+        pass
 
     def manage_event(self, event):
         pass

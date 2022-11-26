@@ -1,0 +1,41 @@
+{% extends "base.html" %} {% block body %}
+
+<h1 class="text-warning">Lol Shooter Leaderboard</h1>
+<div>
+  <form action="/search" method="post" style="float: right">
+    <input
+      autocomplete="off"
+      autofocus
+      name="username"
+      placeholder="Search Name"
+      type="text"
+    />
+    <input type="submit" value="Search" />
+  </form>
+  <div>
+    <table class="table table-dark">
+      <thead>
+        <tr>
+          <th scope="col">Username</th>
+          <th scope="col">Score</th>
+          <th scope="col">Seconds Alive</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for user in users %}
+        <tr>
+          <td>{{ user.username }}</td>
+          <td>{{ user.score }}</td>
+          <td>{{ user.time }}</td>
+          <td>
+            <a href="/delete/{{ user.username }}"
+              ><button class="btn btn-danger">Delete</button></a
+            >
+          </td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+    {% endblock %}
+  </div>
+</div>

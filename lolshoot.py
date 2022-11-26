@@ -2,12 +2,14 @@ import pygame
 from breakout.screens import WelcomeScreen, GameScreen, GameOverScreen
 
 
+
 class Game:
     """Main class for the application"""
 
     def __init__(self):
         # Creates the window
         self.window = pygame.display.set_mode((800, 800))
+        pygame.display.set_caption('LoL Shoot')
 
 
     def run(self):
