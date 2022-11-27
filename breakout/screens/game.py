@@ -32,12 +32,10 @@ class GameScreen(BaseScreen):
 
         #Time & Score
         self.score = 0
+        self.time_alive = 0
 
         #Sound Because every enemy has same death sound
         self.enemy_death = pygame.mixer.Sound('./sounds/enemydeathsound.mp3')
-
-        #Time alive
-        self.time_alive = 0
 
         #Death Screen
         self.death = False
@@ -121,7 +119,7 @@ class GameScreen(BaseScreen):
                 self.enemies.add(enemy)
 
         if self.time_alive > 30 and self.time_alive < 60:
-            if random.randrange(0, 100) < 1.5:
+            if random.randrange(0, 100) < 2:
                 sides = ['top', 'bottom', 'left', 'right']
                 side = random.choice(sides)
                 if side == 'top':
