@@ -24,9 +24,15 @@
       <tbody>
         {% for user in users %}
         <tr>
-          <td>{{ user.username }}</td>
-          <td>{{ user.score }}</td>
-          <td>{{ user.time }}</td>
+          <td>
+            <a
+              href="{{ url_for('viewscore', username=user.username) }}"
+              class="text-decoration-none"
+              >{{ user.username }}</a
+            >
+          </td>
+          <td>{{ user.get_highest_score() }}</td>
+          <td>{{ user.get_highest_time() }}</td>
           <td>
             <a href="/delete/{{ user.username }}"
               ><button class="btn btn-danger">Delete</button></a
