@@ -1,1 +1,5 @@
-{"cata": {"score": 5, "time": 1}, "calla": {"score": 4, "time": 25}, "Karlos": {"score": 0, "time": 4}, "AllenTEST": {"score": 24, "time": 36}, "Allen129": {"score": 10, "time": 12}}
+{
+  "cata": { "password": "123", "score": [1, 2, 3, 1], "time": [2, 2, 3, 1] },
+  "calla": { "password": "123", "score": [4, 5], "time": [2, 6] },
+  "Tristan": { "password": "LoL", "score": [6, 10, 46], "time": [3, 12, 50] }
+}
