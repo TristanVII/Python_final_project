@@ -34,10 +34,7 @@ class GameScreen(BaseScreen):
         #Time & Score
         self.score = 0
         self.time_alive = 0
-
-        #Sound Because every enemy has same death sound
-        self.enemy_death = pygame.mixer.Sound('./sounds/enemydeathsound.mp3')
-
+    
         #Death Screen
         self.death = False
         self.death_boxes = pygame.sprite.Group()
@@ -87,7 +84,8 @@ class GameScreen(BaseScreen):
                     print(self.champion.cooldown)
                     ability_direction = pygame.mouse.get_pos()
                     ability = Ability(self.champion.pos, self.champion_selection[self.current_selection][2], self.champion_selection[self.current_selection][3], self.champion_selection[self.current_selection][4])
-                    ability.sound_ability.play()
+                    #ability.sound_ability.play()
+                    pygame.mixer.music.play(1)
                     ability.set_target(ability_direction)
                     self.abilities.add(ability)
         if event.type == pygame.MOUSEBUTTONDOWN:
@@ -167,12 +165,15 @@ class GameScreen(BaseScreen):
 
         for i in self.abilities:
             if pygame.sprite.spritecollide(i, self.enemies, dokill=True):
-                self.enemy_death.play()
+                # self.enemy_death.mixer.music.play()
+                pygame.mixer.music.load('./sounds/enemydeathsound.mp3')
+                pygame.mixer.music.play(1)
                 i.kill()
                 self.score += 1
                 
         if pygame.sprite.spritecollide(self.champion, self.enemies, dokill=False):
-            self.champion.champion_death.play()
+            pygame.mixer.music.load(self.champion.champion_death)
+            pygame.mixer.music.play(1)
             self.death = True
             self.draw()
             pygame.display.flip()

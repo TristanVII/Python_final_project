@@ -11,7 +11,7 @@ class Champion(pygame.sprite.Sprite):
         self.pos = Vector2(pos)
         self.speed = 2
         self.cooldown = 0
-        self.champion_death = pygame.mixer.Sound(deathsound)
+        self.champion_death = deathsound
 
         # Starting position = middle of the screen, bottom
  

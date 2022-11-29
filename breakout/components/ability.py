@@ -10,7 +10,7 @@ class Ability(pygame.sprite.Sprite):
         self.rect = self.image.get_rect(center=pos)
         self.pos = Vector2(pos)
         self.speed = 9
-        self.sound_ability = pygame.mixer.Sound(sound)
+        self.sound_ability = pygame.mixer.music.load(sound)
 
     def set_target(self, pos):
         self.target = Vector2(pos)

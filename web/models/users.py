@@ -31,6 +31,14 @@ class Userlist:
         return sorted(self.list_users, key = lambda x: x.username, reverse=False)
 
     def get_user(self, user):
+        """
+        Get a user from his username
+        Args:
+            user (string): username
+
+        Returns:
+            the class of the user based on his username
+        """
         username = None
         for i in self.list_users:
             if i.username == user:
@@ -49,6 +57,14 @@ class Userlist:
             json.dump(self.to_dict(), w)
 
     def delete(self, username):
+        """
+        Deletes a user in the list_users
+        Args:
+            username (string): username
+
+        Returns:
+            _type_: list of deleted users (usually one) in case deleting user in unsuccesful
+        """
         deleted = []
         for user in self.list_users:
             if username.lower() == user.username.lower():
