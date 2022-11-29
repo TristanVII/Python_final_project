@@ -1,1 +1,2 @@
-from .users import User, Userlist
+from .users import Userlist
+from .user import User

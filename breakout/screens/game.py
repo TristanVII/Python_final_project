@@ -10,6 +10,7 @@ pygame.mixer.init()
 class GameScreen(BaseScreen):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
+
         #champion Selection
         self.current_selection = self.state['current_selection']
         self.champion_selection = {

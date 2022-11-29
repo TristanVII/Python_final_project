@@ -7,6 +7,9 @@ from ..components import Background, Logo
 class WelcomeScreen(BaseScreen):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
+        
+        #Put back default screen size
+        self.window = pygame.display.set_mode((800, 800))
 
         #Main Background Class
         self.background = Background()

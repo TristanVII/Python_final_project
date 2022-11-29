@@ -34,20 +34,22 @@ def delete(username):
         userlist.save()
         return redirect("/"), 302
 
-@app.route('/register/<username>/<password>', methods=['GET'])
-def register(username, password):
+@app.route('/register', methods=['POST'])
+def register():
     valid_user = True
     userlist = Userlist()
+    data = request.json
+    print(data)
     users = userlist.list_users
     for i in users:
-        if i.username == username:
-            if i.password != password:
+        if i.username == data['username']:
+            if i.password != data['password']:
                 valid_user = False
                 return jsonify(valid_user), 404
             else:
                 return jsonify(valid_user), 200
     if valid_user == True:
-        userlist.add(User(username, password))
+        userlist.add(User(data['username'], data['password']))
         userlist.save()
         return jsonify(valid_user), 200
 

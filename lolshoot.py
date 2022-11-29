@@ -1,5 +1,5 @@
 import pygame
-from breakout.screens import WelcomeScreen, GameScreen, GameOverScreen
+from breakout.screens import WelcomeScreen, GameScreen, GameOverScreen, Login
 
 
 
@@ -17,6 +17,7 @@ class Game:
 
         # These are the available screens
         screens = {
+            "login": Login,
             "welcome": WelcomeScreen,
             "game": GameScreen,
             "game_over": GameOverScreen
@@ -24,7 +25,7 @@ class Game:
 
         # Start the loop
         running = True
-        current_screen = "welcome"
+        current_screen = "login"
         current_state = {}
         while running:
             print(current_state)

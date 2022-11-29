@@ -1,35 +1,20 @@
 import json, os
-
-class User:
-    def __init__(self, username, password, score=[], time=[]):
-        self.username = username
-        self.password = password
-        self.score = score
-        self.time = time
-
-    def to_dict(self):
-        return {
-            "password": self.password,
-            "score": self.score,
-            "time": self.time,
-        }
-
-    def get_highest_score(self):
-            scores = sorted(self.score, key = lambda x: x, reverse=True)
-            return scores[0]
-
-    def get_highest_time(self):
-        times = sorted(self.time, key = lambda x: x, reverse=True)
-        return times[0]
+from .user import User
 
 
 class Userlist: 
     def __init__(self):
+        """
+        Initialize a Userlist object that stores Users
+        """
         self.path_json = os.path.join(os.getcwd(), 'users.json')
         self.list_users = []
         self.load_from_json()
 
     def add(self, user):
+        """
+        Add a user to self.list_users
+        """
         self.list_users.append(user)
 
     def load_from_json(self):
@@ -39,7 +24,11 @@ class Userlist:
                 self.list_users.append(User(users, data[users]['password'], data[users]['score'], data[users]['time']))
 
     def get_users(self):
-            return sorted(self.list_users, key = lambda x: x.username, reverse=False)
+        """
+        Returns:
+            list of users
+        """
+        return sorted(self.list_users, key = lambda x: x.username, reverse=False)
 
     def get_user(self, user):
         username = None
