@@ -28,9 +28,13 @@ class Login(BaseScreen):
         self.button2 = TextBox(
             (100, 50), "Login", color=(0, 0, 0), bgcolor=(249,232,176)
         )
+        self.button3 = TextBox(
+            (200, 50), "Play Offline", color=(255, 255, 255), bgcolor=(0, 0, 0)
+        )
         self.button1.rect.topleft = (638, 425)
         self.button2.rect.topleft = (400, 325)
-        self.sprites.add(self.button1, self.button2)
+        self.button3.rect.topleft = (0, 425)
+        self.sprites.add(self.button1, self.button2, self.button3)
 
         #Text
         self.text1 = render_text('Username', 20)
@@ -74,6 +78,12 @@ class Login(BaseScreen):
             if self.button2.rect.collidepoint(event.pos):
                     self.input_box.entered = self.input_box.text
                     self.input_password.entered = self.input_password.text
+            
+            #If click play offline play without having to login
+            if self.button3.rect.collidepoint(event.pos):
+                self.state["online"] = False
+                self.running = False
+                self.next_screen = 'welcome'
 
 
         #Manage input box event
@@ -91,13 +101,10 @@ class Login(BaseScreen):
             if valid_user == 200:
                 self.state["username"] = username
                 self.state["password"] = password
+                self.state["online"] = True
                 self.next_screen = 'welcome'
                 self.running = False
             elif valid_user == 404:
                 self.invalid_user = username
                 self.invalid = True
-            # user = User(username, score, time)
-            # users = Userlist()
-            # users.add(user)
-            # users.save()
 

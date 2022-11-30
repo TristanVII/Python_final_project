@@ -96,8 +96,12 @@ class GameScreen(BaseScreen):
                 self.champion.set_target(mouse_pos)
 
     def manage_enemies(self):
+
+        #Manage the spawning of Enemies checks if time is less than 30 seconds
         if self.time_alive < 30:
+            #1 % chance to spawn an enemy
             if random.randrange(0, 100) < 1:
+                #List of sides to choose from to spawn the enemies
                 sides = ['top', 'bottom', 'left', 'right']
                 side = random.choice(sides)
                 if side == 'top':
@@ -114,9 +118,11 @@ class GameScreen(BaseScreen):
                     x = 800
 
                 enemy = Enemy((x, y))
+                #Give champion position to enemy class so they can move to champion pos
                 enemy.set_target(self.champion.pos)
                 self.enemies.add(enemy)
 
+        #Repeating the Above  but with timer between 30 - 60 seconds
         if self.time_alive > 30 and self.time_alive < 60:
             if random.randrange(0, 100) < 2:
                 sides = ['top', 'bottom', 'left', 'right']
@@ -138,6 +144,7 @@ class GameScreen(BaseScreen):
                 enemy.set_target(self.champion.pos)
                 self.enemies.add(enemy)
 
+    #After 60 seconds spawns enemies the most
         if self.time_alive > 60:
             if random.randrange(0, 100) < 3:
                 sides = ['top', 'bottom', 'left', 'right']
@@ -159,18 +166,20 @@ class GameScreen(BaseScreen):
                 enemy.set_target(self.champion.pos)
                 self.enemies.add(enemy)
         
+        #This will continously give my enemy class my champions position as target so every frame update they move towards him
         for i in self.enemies:
             i.set_target(self.champion.pos)
             
 
+        #Check collision between ability and enemies
         for i in self.abilities:
             if pygame.sprite.spritecollide(i, self.enemies, dokill=True):
-                # self.enemy_death.mixer.music.play()
                 pygame.mixer.music.load('./sounds/enemydeathsound.mp3')
                 pygame.mixer.music.play(1)
                 i.kill()
                 self.score += 1
                 
+        #Check collision for champion and enemies
         if pygame.sprite.spritecollide(self.champion, self.enemies, dokill=False):
             pygame.mixer.music.load(self.champion.champion_death)
             pygame.mixer.music.play(1)
