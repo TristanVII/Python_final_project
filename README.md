@@ -7,6 +7,7 @@ Lolshooter is a League of Legends inspired shooting/dodging game where you must 
 * In order to play, you must first download this repository
 * Since the webapp is not hosted, you must launch the webapp before playing. (Skip this step to play offline)
 * You can now run *lolshooter.py*
+# You will need Python and Flask installed on your computer
 
 ## Login Page
 
